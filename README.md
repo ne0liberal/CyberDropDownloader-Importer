@@ -7,7 +7,7 @@ assumes your collections folders will have at least a shared string with the TB 
 
 requires fuzzywuzzy to string match.
 
-use at your own risk
+USE AT YOUR OWN RISK. NOTHING BROKE OR MOVED INCORRECTLY ON MY RUNS, BUT DON'T TELL AT ME IF SOMETHING GOES WRONG. IT SHOULD ASK YOU TO CONFIRM THE PATHS PRIOR TO ACTUALLY MOVING.
 
 feel free to audit/improve the code
 
