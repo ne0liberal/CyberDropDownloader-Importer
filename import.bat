@@ -1,2 +1,4 @@
 @echo off
-python -W ignore importer.py
+
+REM were using -W to suppress the levenshtein error
+python -W ignore importer_auto.py
