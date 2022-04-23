@@ -35,6 +35,7 @@ def ready_to_import(input_dir):
         for file in files:
             if not file.endswith(".part"):
                 return True
+    return False
 
 
 def move_files(input_dir, output_dir):
