@@ -1,4 +1,7 @@
 # CyberDropDownloaderImporter
+
+##importer_auto.py
+
 imports everything i download with cyberdrop into my collections
 
 really only works with the TB rips, but i guess other folders *could* work.
