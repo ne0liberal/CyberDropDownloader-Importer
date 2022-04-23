@@ -23,6 +23,7 @@ categories = [
     "Snapchat",
     "Suicide Girls",
     "TikTok",
+    "Teen",
     "Trans",
     "Twitch",
     "XXX",
