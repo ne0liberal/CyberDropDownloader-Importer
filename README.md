@@ -10,3 +10,9 @@ requires fuzzywuzzy to string match.
 use at your own risk
 
 feel free to audit/improve the code
+
+
+edit line #46 and #49 with your proper paths
+
+    cyberdrop_prefix = "path/to/CyberDropDownloader/Downloads/"
+    collections_prefix = "path/to/collections/"
