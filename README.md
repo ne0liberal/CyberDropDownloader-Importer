@@ -1,6 +1,6 @@
 # CyberDropDownloaderImporter
 
-##importer_auto.py
+## importer_auto.py
 
 imports everything i download with cyberdrop into my collections
 
