@@ -46,7 +46,7 @@ def main():
     cyberdrop_prefix = "path/to/CyberDropDownloader/Downloads/"
     cyberdrop_dirs = next(os.walk(cyberdrop_prefix))[1]
     
-    collections_prefix = "path/to/collections/"
+    collections_prefix = "path/to/your/collections/"
     collections_dirs = next(os.walk(collections_prefix))[1]
     
     for cyber_dir in cyberdrop_dirs:
