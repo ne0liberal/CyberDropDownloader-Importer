@@ -1,7 +1,7 @@
-import os, shutil, subprocess
+import os, shutil
 from fuzzywuzzy import fuzz
 
-categories = [
+tags = [
     "Thotsbay Forums",
     "3D",
     "ASMR",
@@ -23,12 +23,18 @@ categories = [
     "Snapchat",
     "Suicide Girls",
     "TikTok",
-    "Teen",
+    "Teen"
     "Trans",
     "Twitch",
     "XXX",
     "Youtube",
 ]
+
+def ready_to_import(input_dir):
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+            if not file.endswith(".part"):
+                return True
 
 
 def move_files(input_dir, output_dir):
@@ -51,27 +57,32 @@ def main():
     collections_dirs = next(os.walk(collections_prefix))[1]
     
     for cyber_dir in cyberdrop_dirs:
-        cyber_dir_sanitized = cyber_dir.split(" - ")
-        for category in categories:
-            if category in cyber_dir_sanitized:
-                cyber_dir_sanitized.remove(category)
-        for sanit in cyber_dir_sanitized:
-            sanit = sanit.lower()
-            for collections_dir in collections_dirs:
-                collections_dir_sanitized = collections_dir.lower()
-                if fuzz.ratio(sanit, collections_dir_sanitized) > 90:
+        cyber_dir_split = cyber_dir.split(" - ")
+        for tag in tags:
+            if tag in cyber_dir_split:
+                cyber_dir_split.remove(tag)
+        for model_cyber in cyber_dir_split:
+            model_cyber = model_cyber.lower()
+            for model_collections in collections_dirs:
+                if fuzz.ratio(model_cyber, model_collections.lower()) > 90:
                     input_dir = os.path.join(cyberdrop_prefix, cyber_dir)
-                    output_dir = os.path.join(collections_prefix, collections_dir)
+                    output_dir = os.path.join(collections_prefix, model_collections)
                     
                     if os.path.exists(input_dir):
                         if os.path.exists(output_dir):
-                            try:
+                            if ready_to_import(input_dir):
                                 print(f'{input_dir}\n->\n{output_dir}')
                                 if input("Continue? [y/n]: ") == "y":
-                                    move_files(input_dir, output_dir)
+                                    try:
+                                        move_files(input_dir, output_dir)
+                                    except Exception as e:
+                                        print(f"error: {e}")
                                     os.system("cls")
-                            except Exception as e:
-                                pass
+                                else:
+                                    os.system("cls")
+                            else:
+                                print(f"{output_dir} has nothing to import")
+                                continue
                         else:
                             print(f"{input_dir} does not exist")
                             return
