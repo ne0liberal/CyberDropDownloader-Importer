@@ -31,7 +31,8 @@ tags = [
     "Youtube",
 ]
 
-def ready_to_import(input_dir):
+
+def ready_to_import(input_dir: str):
     for root, dirs, files in os.walk(input_dir):
         for file in files:
             if not file.endswith(".part"):
@@ -39,59 +40,79 @@ def ready_to_import(input_dir):
     return False
 
 
-def move_files(input_dir, output_dir):
+def move_and_sort(input_dir, output_dir):
     for root, dirs, files in os.walk(input_dir):
         for file in files:
             if not file.endswith(".part"):
                 file_path = os.path.join(root, file)
                 try:
-                    print(f"Moving {file} to {output_dir}")
+                    message = f"Moving {file} to {output_dir}"
                     shutil.move(file_path, output_dir)
                 except shutil.Error as e:
-                    print(f"error: {e}")
+                    message = f"error: {e}"
+                finally:
+                    print(message)
+  
 
+def import_files(input_dir, output_dir, token_set_ratio, auto_move=False):
+    if os.path.exists(input_dir) and os.path.exists(output_dir):
+        if ready_to_import(input_dir):
+            
+            os.system("cls")
+            print(f"Ratio: {token_set_ratio}")
+            print(f'{input_dir}\n->\n{output_dir}')
+            
+            if auto_move:
+                move_and_sort(input_dir, output_dir)
+                
+            else:
+                if input("Move files? (y/n) ") == "y":
+                    move_and_sort(input_dir, output_dir)
+                    
+            os.system("cls")
+        else:
+            print(f"{output_dir} has nothing to import")
+            os.system("cls")
+    else:
+        print(f"{output_dir} does not exist")
+        print("Something went very wrong...")
 
 def main():
+    unsorted = []
+    
     cyberdrop_prefix = "path/to/CyberDropDownloader/Downloads/"
     cyberdrop_dirs = next(os.walk(cyberdrop_prefix))[1]
-    
-    collections_prefix = "path/to/your/collections/"
+    collections_prefix = "path/to/collections/"
     collections_dirs = next(os.walk(collections_prefix))[1]
-    
-    for cyber_dir in cyberdrop_dirs:
+
+    for cyber_dir in sorted(cyberdrop_dirs):
         cyber_dir_split = cyber_dir.split(" - ")
-        for tag in tags:
+        
+        for tag in sorted(tags):
             if tag in cyber_dir_split:
                 cyber_dir_split.remove(tag)
+                
         for model_cyber in cyber_dir_split:
             model_cyber = model_cyber.lower()
-            for model_collections in collections_dirs:
-                if fuzz.ratio(model_cyber, model_collections.lower()) > 90:
-                    input_dir = os.path.join(cyberdrop_prefix, cyber_dir)
-                    output_dir = os.path.join(collections_prefix, model_collections)
-                    
-                    if os.path.exists(input_dir):
-                        if os.path.exists(output_dir):
-                            if ready_to_import(input_dir):
-                                print(f'{input_dir}\n->\n{output_dir}')
-                                if input("Continue? [y/n]: ") == "y":
-                                    try:
-                                        move_files(input_dir, output_dir)
-                                    except Exception as e:
-                                        print(f"error: {e}")
-                                    os.system("cls")
-                                else:
-                                    os.system("cls")
-                            else:
-                                print(f"{output_dir} has nothing to import")
-                                continue
-                        else:
-                            print(f"{input_dir} does not exist")
-                            return
-                    else:
-                        print(f"{output_dir} does not exist")
-                        return
-
+            
+            for model_collections in sorted(collections_dirs):
+                model_collections = model_collections.lower()
+                
+                token_set_ratio = fuzz.token_set_ratio(model_cyber, model_collections)
+                input_dir = os.path.join(cyberdrop_prefix, cyber_dir)
+                output_dir = os.path.join(collections_prefix, model_collections)
+                
+                unsorted.append({"ratio": token_set_ratio, "input_dir": input_dir, "output_dir": output_dir})
+    
+    for item in sorted(unsorted, key=lambda x: x["ratio"], reverse=True):
+        if item["ratio"] >= 100:
+            import_files(item["input_dir"], item["output_dir"], item["ratio"], auto_move=False)
+        elif item["ratio"] >= 45 and item["ratio"] < 100:
+            import_files(item["input_dir"], item["output_dir"], item["ratio"], auto_move=False)
+        elif item["ratio"] > 25 and item["ratio"] < 45:
+            if ready_to_import(item["input_dir"]):
+                print(item["input_dir"], "needs to be manually imported.")
+                input("Press enter to continue...")
 
 if __name__ == "__main__":
     main()
