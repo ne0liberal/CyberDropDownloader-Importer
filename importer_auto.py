@@ -105,14 +105,16 @@ def main():
                 unsorted.append({"ratio": token_set_ratio, "input_dir": input_dir, "output_dir": output_dir})
     
     for item in sorted(unsorted, key=lambda x: x["ratio"], reverse=True):
-        if item["ratio"] >= 100:
-            import_files(item["input_dir"], item["output_dir"], item["ratio"], auto_move=False)
+        if item["ratio"] == 100:
+            import_files(item["input_dir"], item["output_dir"], item["ratio"], auto_move=True)
         elif item["ratio"] >= 45 and item["ratio"] < 100:
             import_files(item["input_dir"], item["output_dir"], item["ratio"], auto_move=False)
         elif item["ratio"] > 25 and item["ratio"] < 45:
             if ready_to_import(item["input_dir"]):
                 print(item["input_dir"], "needs to be manually imported.")
-                input("Press enter to continue...")
+                output_dir = input("Enter the output directory: ")
+                import_files(item["input_dir"], output_dir, item["ratio"], auto_move=False)
+                break
 
 if __name__ == "__main__":
     main()
