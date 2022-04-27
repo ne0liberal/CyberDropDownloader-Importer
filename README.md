@@ -1,4 +1,4 @@
-# CyberDropDownloaderImporter
+# CyberDropDownloader Importer
 
 ## importer_auto.py
 
