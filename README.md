@@ -15,7 +15,7 @@ USE AT YOUR OWN RISK. NOTHING BROKE OR MOVED INCORRECTLY ON MY RUNS, BUT DON'T Y
 feel free to audit/improve the code
 
 
-edit line #83 and #85 with your proper full paths
+edit line #60 and #62 with your proper full paths
 
-    cyberdrop_prefix = "path/to/CyberDropDownloader/Downloads/"
-    collections_prefix = "path/to/your/collections/"
+    cyberdrop_root = "path/to/CyberDropDownloader/Downloads/"
+    collections_root = "path/to/collections/"
